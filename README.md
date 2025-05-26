@@ -15,7 +15,7 @@
     <p style="color: rgba(255,255,255,0.9); 
               font-size: 1.1em; 
               margin: 10px 0 0 0;">
-      Everything you need to deliver an outstanding workshop experience
+      Demo App: https://testing-flutter-ca1da.web.app/
     </p>
   </div>
 </div>
