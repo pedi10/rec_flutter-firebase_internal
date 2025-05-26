@@ -145,19 +145,31 @@ Widget greetingText() {
 
 **Scaffold with Padding**:
 ```dart
-Scaffold(
-  body: Padding(
-    padding: EdgeInsets.all(25),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        greetingText(),
-        SizedBox(height: 16),
-      ],
-    ),
-  ),
-)
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Greeting Text
+            greetingText(),
+            SizedBox(height: 16),
+
+            // Battery Card
+            batteryCard(),
+            SizedBox(height: 16),
+
+            // Temperature Card
+            temperatureCard(),
+            SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
 ```
 
 ## Step 5: Implement Battery Card with Variable
