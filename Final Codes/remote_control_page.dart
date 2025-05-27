@@ -11,6 +11,18 @@ class ControlScreen extends StatefulWidget {
 }
 
 class _ControlScreenState extends State<ControlScreen> {
+  /*
+  This screen provides remote control functionality for a robot.
+  It allows users to control the robot's movement and actions such as turning on/off lights and fire.
+  The screen uses Firebase Realtime Database to send commands to the robot.
+  The controls include buttons for moving the robot forward, backward, left, right, and stop,
+  as well as toggling the light and fire actions.
+  The state of the robot's light and fire is tracked using boolean variables,
+  and the commands are sent to Firebase when the buttons are pressed.
+  */
+
+  // ------- VARIABLES ------- //
+
   // Firebase database reference
   final database = FirebaseDatabase.instance.ref();
 
@@ -18,19 +30,14 @@ class _ControlScreenState extends State<ControlScreen> {
   bool lightOn = false;
   bool fireOn = false;
 
-  // Function to send commands to Firebase
-  void sendCommand(String command) {
-    database.child('robot').set({
-      'command': command,
-      'light': lightOn,
-      'fire': fireOn,
-    });
-  }
+  // ------- BUILD ------- //
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar with title
       appBar: AppBar(title: const Text('Robot Control')),
+      // instead of using padding directly as body, we use SingleChildScrollView to allow scrolling.
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -50,6 +57,8 @@ class _ControlScreenState extends State<ControlScreen> {
       ),
     );
   }
+
+  // ------- UI FUNCTIONS ------- //
 
   // Movement Controls with Forward, Backward, Left, Right, and Stop buttons
   Widget movementControls() {
@@ -201,5 +210,18 @@ class _ControlScreenState extends State<ControlScreen> {
         ),
       ],
     );
+  }
+
+  // ------- LOGIC FUNCTIONS ------- //
+
+  // Function to send commands to Firebase
+  void sendCommand(String command) {
+    // Update the Firebase database with the command and current state of light and fire
+    // using the 'robot' node, use set to overwrite existing data
+    database.child('robot').set({
+      'command': command,
+      'light': lightOn,
+      'fire': fireOn,
+    });
   }
 }

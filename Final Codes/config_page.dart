@@ -11,8 +11,25 @@ class ConfigScreen extends StatefulWidget {
 }
 
 class ConfigScreenState extends State<ConfigScreen> {
+  /*
+  This screen allows users to reset the robot's dashboard data to default values.
+  It provides two main functionalities:
+  1. Resetting the battery data to a default level of 85%.
+  2. Resetting the temperature data to a default 24-hour pattern.
+  The screen uses Firebase Firestore to store and retrieve the data.
+  The UI consists of two cards, each with a button to perform the reset action.
+  The battery reset card displays a battery icon and a button to reset the battery level,
+  while the temperature reset card displays a temperature icon and a button to reset the temperature readings.
+  When the reset buttons are pressed, the corresponding data is updated in Firebase,
+  and a success message is shown to the user.
+  */
+
+  // ------- VARIABLES ------- //
+
   // Create connection to Firebase database
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // ------- BUILD ------- //
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +46,9 @@ class ConfigScreenState extends State<ConfigScreen> {
             children: [
               // Page title
               const Text('Reset dashboard data to default values'),
-              const SizedBox(height: 32), // Button to reset battery data only
+              const SizedBox(height: 32),
+
+              // Button to reset battery data only
               batteryResetCard(),
               const SizedBox(height: 16),
 
@@ -161,6 +180,7 @@ class ConfigScreenState extends State<ConfigScreen> {
 
   // Function to reset battery data back to 85%
   Future<void> resetBatteryData() async {
+    // using a try-catch block to handle any errors
     try {
       // Save battery level of 85% to Firebase
       await firestore.collection('robots').doc('battery').set({
@@ -196,15 +216,20 @@ class ConfigScreenState extends State<ConfigScreen> {
       List<Map<String, dynamic>> temperatureList = [];
       DateTime currentTime = DateTime.now();
 
-      // Make 24 temperature readings (one for each hour)
+      // Make 24 temperature readings (one for each 2 hour)
       for (int hour = 0; hour < 24; hour++) {
-        // Calculate time for each hour
-        DateTime timeForThisHour = currentTime.subtract(
-          Duration(hours: 23 - hour),
+        // Calculate time for each 2-hour interval with .00 minutes
+        DateTime timeForThisHour = DateTime(
+          currentTime.year,
+          currentTime.month,
+          currentTime.day,
+          hour * 2, // Every 2 hours (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)
+          0, // .00 minutes
         );
 
-        // Create fake temperature between 20-30 degrees
-        double fakeTemperature = 20.0 + (hour % 8) * 2.5 + (hour % 3) * 1.2;
+        // Create random temperature between 20-30 degrees
+        double fakeTemperature =
+            20.0 + (DateTime.now().millisecondsSinceEpoch + hour * 1000) % 10;
 
         // Add this temperature reading to our list
         temperatureList.add({

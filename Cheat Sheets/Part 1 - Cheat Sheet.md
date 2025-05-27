@@ -33,8 +33,7 @@
 | [Step 3](#step-3-add-column-and-empty-ui-functions) | **UI Structure** | Add Column layout and define empty UI component functions |
 | [Step 4](#step-4-implement-greeting-text-and-add-padding) | **Greeting & Padding** | Create styled greeting text and add proper spacing |
 | [Step 5](#step-5-implement-battery-card-with-variable) | **Battery Card** | Build battery status card with percentage display |
-| [Step 6](#step-6-add-stack-to-battery-card) | **Visual Enhancement** | Add circular progress indicator with Stack layout |
-| [Step 7](#step-7-add-temperature-card-with-fl_chart) | **Chart Integration** | Implement temperature visualization with fl_chart |
+| [Step 6](#step-6-add-temperature-card-with-fl_chart) | **Chart Integration** | Implement temperature visualization with fl_chart |
 
 ---
 
@@ -46,6 +45,8 @@ Open Visual Studio Code, create a new Flutter project, run the app, and explore 
   - Choose `Application`.
   - Select a folder and name the project.
   - Press `F5` to run the app once ready.
+
+---
 
 ## Step 2: Clean Up main.dart with Empty Scaffold
 Edit `main.dart` to remove the default counter example, setting up a `StatefulWidget` with an empty `Scaffold` as a foundation for building the UI.
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'REC Robot Telemetry Demo App',
+      title: 'REC Workshop - Flutter Demo',
       theme: ThemeData.dark(),
       home: const MyHomePage(),
     );
@@ -82,8 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold();
   }
+
 }
 ```
+
+---
+
 
 ## Step 3: Add Column and Empty UI Functions
 Modify `_MyHomePageState` to include a `Column` in the `Scaffold` body. Define empty `greetingText`, `batteryCard`, and `temperatureCard` functions outside `build` to structure UI components.
@@ -129,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 ```
+---
 
 ## Step 4: Implement Greeting Text and Add Padding
 Update the `greetingText` function to display a styled "Hi Ken!" text. Then wrap the `Column` in a `Padding` widget to add spacing around the UI.
@@ -136,10 +142,7 @@ Update the `greetingText` function to display a styled "Hi Ken!" text. Then wrap
 **greetingText Function**:
 ```dart
 Widget greetingText() {
-  return Text(
-    'Hi Ken!',
-    style: TextStyle(fontSize: 18),
-  );
+  return Text('Hi User!', style: TextStyle(fontSize: 20));
 }
 ```
 
@@ -171,97 +174,61 @@ Widget greetingText() {
     );
   }
 ```
+---
 
 ## Step 5: Implement Battery Card with Variable
 Define a `battery` variable above the `build` and update the `batteryCard` function to display a `Card` with a `Row` showing a title and battery percentage as text, setting up for a visual upgrade.
 
 ```dart
-int battery = 85;
-
+// Battery Card
 Widget batteryCard() {
+  // Battery percentage variable
+  int battery = 85;
+
   return Card(
+    // Card properties - Style
+    color: Colors.blue,
     surfaceTintColor: Colors.blue,
+    elevation: 3,
+    // Child of the card
     child: Padding(
+      // Padding for the card content
       padding: EdgeInsets.fromLTRB(16, 16, 25, 16),
+      // Row to align the content
       child: Row(
+        // Main axis and cross axis alignment -> Space between the title and battery percentage
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        // Children of the row
         children: [
+          // Title of the card
           Text(
             'Robot Battery',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text(
-            '$battery%',
-            style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-```
 
-## Step 6: Add Stack to Battery Card
-Replace the battery percentage `Text` with a `Stack` containing a `CircularProgressIndicator` and `Text` to visualize the battery level. Update the `batteryCard` function. (Copy-paste to save time.)
-
-**Stack Code**:
-```dart
-Stack(
-  alignment: Alignment.center,
-  children: [
-    SizedBox(
-      width: 70,
-      height: 70,
-      child: CircularProgressIndicator(
-        value: battery / 100,
-        color: Colors.white,
-        strokeWidth: 6,
-        backgroundColor: Colors.white.withOpacity(0.3),
-      ),
-    ),
-    Text(
-      '$battery%',
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    ),
-  ],
-)
-```
-
-**Updated batteryCard Function**:
-```dart
-Widget batteryCard() {
-  return Card(
-    surfaceTintColor: Colors.blue,
-    child: Padding(
-      padding: EdgeInsets.fromLTRB(16, 16, 25, 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Robot Battery',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          // Cutomized Widget - Stack of CircularProgressIndicator and Text
           Stack(
             alignment: Alignment.center,
             children: [
+              // SizedBox to hold the CircularProgressIndicator space
+              // if not specified, it will render the default size of the CircularProgressIndicator
               SizedBox(
                 width: 70,
                 height: 70,
                 child: CircularProgressIndicator(
-                  value: battery / 100,
-                  color: Colors.white,
-                  strokeWidth: 6,
-                  backgroundColor: Colors.white.withOpacity(0.3),
+                  // CircularProgressIndicator properties
+                  value: battery / 100, // battery percentage
+                  strokeWidth: 6, // width of the progress indicator stroke
+                  color: Colors.white, // color of the progress indicator
+                  backgroundColor: Colors
+                      .white24, // background color of the progress indicator
                 ),
               ),
+              // Text widget to display the battery percentage
               Text(
-                '$battery%',
+                '$battery%', // use $ for variable interpolation
+                // Text properties - Style
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -276,9 +243,10 @@ Widget batteryCard() {
   );
 }
 ```
+---
 
-## Step 7: Add Temperature Card with fl_chart
-Add the `fl_chart` package to `pubspec.yaml` to enable charting. Implement the temperature card with a line chart using provided data to visualize temperature trends. (Copy-paste to save time.)
+## Step 6: Add Temperature Card with fl_chart
+Add the `fl_chart` package to `pubspec.yaml` to enable charting. Implement the temperature card with a line chart using provided data to visualize temperature trends.
 
 **pubspec.yaml**:
 ```yaml
@@ -292,38 +260,44 @@ dependencies:
   fl_chart: ^1.0.0
 ```
 
-**fl_chart Import**:
+**fl_chart Import**: </br>
+import this line at the top of the file to add the package to the page.
 ```dart
 import 'package:fl_chart/fl_chart.dart';
 ```
 
-**Temperature Data**:
-```dart
-List<FlSpot> temperatureData = [
-  const FlSpot(0, 18),
-  const FlSpot(2, 17),
-  const FlSpot(4, 16),
-  const FlSpot(6, 19),
-  const FlSpot(8, 22),
-  const FlSpot(10, 26),
-  const FlSpot(12, 29),
-  const FlSpot(14, 32),
-  const FlSpot(16, 30),
-  const FlSpot(18, 27),
-  const FlSpot(20, 24),
-  const FlSpot(22, 21),
-  const FlSpot(24, 19),
-];
-```
 
 **temperatureCard Function**:
 ```dart
+// Temperature Card
 Widget temperatureCard() {
+  // temperature data (hour vs temperature in Celsius)
+  List<FlSpot> temperatureData = [
+    const FlSpot(0, 18), // 00:00 - 18°C
+    const FlSpot(2, 17), // 02:00 - 17°C
+    const FlSpot(4, 16), // 04:00 - 16°C
+    const FlSpot(6, 19), // 06:00 - 19°C
+    const FlSpot(8, 22), // 08:00 - 22°C
+    const FlSpot(10, 26), // 10:00 - 26°C
+    const FlSpot(12, 29), // 12:00 - 29°C
+    const FlSpot(14, 32), // 14:00 - 32°C
+    const FlSpot(16, 30), // 16:00 - 30°C
+    const FlSpot(18, 27), // 18:00 - 27°C
+    const FlSpot(20, 24), // 20:00 - 24°C
+    const FlSpot(22, 21), // 22:00 - 21°C
+    const FlSpot(24, 19), // 24:00 - 19°C
+  ];
+
   return Card(
+    elevation: 3,
+    // Using a container in the card to set height and padding. if we don't have to set size, we could use Padding directly
     child: Container(
       height: 300,
       padding: const EdgeInsets.all(16),
+      // Column to align the title and chart vertically
       child: Column(
+        // Making the column start from the top
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
@@ -331,32 +305,46 @@ Widget temperatureCard() {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 35),
+          // Using FlChart package to create a line chart
+          // Expanded widget (layout) is used to take all the available space in the column
+          // This is important to make the chart fill the available space
           Expanded(
             child: LineChart(
+              // LineChartData contains all the configuration for our chart
               LineChartData(
+                // Grid configuration - shows horizontal lines but hides vertical lines
                 gridData: FlGridData(show: true, drawVerticalLine: false),
+
+                // Configuration for axis titles (labels on each side of the chart)
                 titlesData: FlTitlesData(
                   show: true,
+                  // Hide titles on the right side
                   rightTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
+                  // Hide titles on the top side
                   topTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
+                  // Bottom titles configuration (X-axis - shows hours)
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 30,
-                      interval: 2,
+                      reservedSize: 30, // Space reserved for the titles
+                      interval:
+                          2, // Show a title every 2 hours (0, 2, 4, 6, etc.)
                     ),
                   ),
+                  // Left titles configuration (Y-axis - shows temperature)
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: 5,
+                      interval:
+                          5, // Show a title every 5 degrees (15, 20, 25, 30, 35)
+                      // Custom function to format the temperature labels
                       getTitlesWidget: (double value, TitleMeta meta) {
                         return Text(
-                          '${value.toInt()}°C',
+                          '${value.toInt()}°C', // Convert to integer and add °C
                           style: const TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
@@ -364,40 +352,56 @@ Widget temperatureCard() {
                           ),
                         );
                       },
-                      reservedSize: 42,
+                      reservedSize:
+                          42, // Space reserved for the temperature labels
                     ),
                   ),
                 ),
+                // Border configuration - we're hiding the border around the chart
                 borderData: FlBorderData(
                   show: false,
                   border: Border.all(color: Colors.grey.withOpacity(0.3)),
                 ),
-                minX: 0,
-                maxX: 24,
-                minY: 15,
-                maxY: 35,
+                // Chart boundaries - defines the visible range of data
+                minX: 0, // Start at hour 0 (midnight)
+                maxX: 24, // End at hour 24 (next midnight)
+                minY: 15, // Minimum temperature to show (15°C)
+                maxY: 35, // Maximum temperature to show (35°C)
+                // Configuration for the actual line(s) on the chart
                 lineBarsData: [
                   LineChartBarData(
-                    spots: temperatureData,
-                    isCurved: true,
-                    curveSmoothness: 0.3,
-                    color: Theme.of(context).primaryColor,
-                    barWidth: 3,
-                    isStrokeCapRound: true,
+                    spots:
+                        temperatureData, // The data points we defined earlier
+                    isCurved:
+                        true, // Makes the line curved instead of straight segments
+                    curveSmoothness:
+                        0.3, // How smooth the curve should be (0-1)
+                    color: Theme.of(
+                      context,
+                    ).primaryColor, // Line color from app theme
+                    barWidth: 3, // Thickness of the line
+                    isStrokeCapRound: true, // Rounded ends for the line
+                    // Configuration for the dots on each data point
                     dotData: FlDotData(
-                      show: true,
+                      show: true, // Show dots on data points
                       getDotPainter: (spot, percent, barData, index) {
+                        // Custom dot appearance
                         return FlDotCirclePainter(
-                          radius: 4,
-                          color: Theme.of(context).primaryColor,
-                          strokeWidth: 2,
-                          strokeColor: Colors.white,
+                          radius: 4, // Size of the dot
+                          color: Theme.of(context).primaryColor, // Dot color
+                          strokeWidth: 2, // Border thickness around the dot
+                          strokeColor:
+                              Colors.white, // Border color around the dot
                         );
                       },
                     ),
+
+                    // Configuration for the area below the line
                     belowBarData: BarAreaData(
-                      show: true,
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      show: true, // Show the filled area below the line
+                      color: Theme.of(context).primaryColor.withOpacity(
+                        0.1,
+                      ), // Semi-transparent fill
                     ),
                   ),
                 ],
@@ -410,3 +414,5 @@ Widget temperatureCard() {
   );
 }
 ```
+---
+🚀 **Congratulations!** You've built a simple dashboard Flutter app!

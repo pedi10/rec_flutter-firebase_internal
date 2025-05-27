@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _MapScreenState extends State<MapScreen> {
+  /*
+  This screen displays a Google Map centered on Kuala Lumpur with markers for specific locations.
+  It uses the Google Maps Flutter plugin to render the map and display markers.
+  The map is initialized with a camera position over Kuala Lumpur, and it includes three markers:
+  - KLCC area
+  - Mid Valley area
+  - Bukit Bintang area
+  Each marker has an info window that appears when tapped.
+  The map supports various gestures like zooming, rotating, and scrolling.
+  The map is styled with rounded corners and padding for better aesthetics.
+  */
+
+  // ------- VARIABLES ------- //
+
   // Google Maps controller
   late GoogleMapController mapController;
 
@@ -47,20 +61,23 @@ class _MapPageState extends State<MapPage> {
     mapController = controller;
   }
 
+  // ------- BUILD ------- //
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Robot Locations')),
+      // Use a Container to add padding and rounded corners around the map
       body: Container(
         margin: const EdgeInsets.all(25.0), // 25px padding around the map
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0), // Rounded corners
           color: Theme.of(context).cardColor, // Use card color from theme
         ),
+        // ClipRRect to apply rounded corners to the map, because GoogleMap does not support border radius directly
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            20.0,
-          ), // Match container's border radius
+          borderRadius: BorderRadius.circular(20.0),
+          // GoogleMap widget with initial camera position and markers
           child: GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: _kualaLumpur,

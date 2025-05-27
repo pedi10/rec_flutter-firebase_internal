@@ -53,23 +53,36 @@ Create a new Firebase project from the Firebase Console to host your app's backe
 
 ## Step 2: Integrate Firebase with Script
 
-**Replace PROJECT_ID and run this script**:
+### Part A: Firebase Setup
 
+**One-liner (Replace PROJECT_ID):**
 ```bash
-# Firebase setup - REPLACE "PROJECT_ID" with your actual project ID
-dart pub global activate flutterfire_cli && 
-flutterfire configure --project=PROJECT_ID && 
-flutter pub add firebase_core cloud_firestore google_maps_flutter && 
-flutterfire configure
-
-# Download all files (Works on Windows, macOS, and Linux)
-curl -o lib/main.dart "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/main.dart" && 
-curl -o lib/config.dart "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/config.dart" && 
-curl -o lib/control.dart "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/control.dart" && 
-curl -o lib/dashboard_firestore.dart "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/dashboard_firestore.dart" && 
-curl -o lib/map_page.dart "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/map_page.dart" && 
-curl -o web/index.html "https://raw.githubusercontent.com/pedi10/umee_rec_flutter-firebase_internal/main/Final%20Codes/index.html"
+dart pub global activate flutterfire_cli && flutterfire configure --project=PROJECT_ID && flutter pub add firebase_core cloud_firestore firebase_database google_maps_flutter fl_chart && flutterfire configure
 ```
+when prompted, select web only.
+when prompted, select yes to reuse the firebase.json.
+
+
+**Step-by-step explanation:**
+1. `dart pub global activate flutterfire_cli` - Installs FlutterFire CLI globally for Firebase integration
+2. `flutterfire configure --project=PROJECT_ID` - Links your Flutter app to your Firebase project (replace PROJECT_ID)
+3. `flutter pub add firebase_core cloud_firestore google_maps_flutter` - Adds Firebase dependencies to pubspec.yaml
+4. `flutterfire configure` - Generates firebase_options.dart with your project configuration
+
+### Part B: Download Project Files
+
+**One-liner:**
+```bash
+curl -o lib/main.dart "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/main.dart" && curl -o lib/map_page.dart "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/map_page.dart" && curl -o lib/control.dart "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/control.dart" && curl -o lib/dashboard_firestore.dart "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/dashboard_firestore.dart" && curl -o lib/config.dart "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/config.dart" && curl -o web/index.html "https://raw.githubusercontent.com/pedi10/rec_flutter-firebase_internal/main/Final%20Codes/index.html"
+```
+
+**Step-by-step explanation:**
+1. `curl -o lib/main.dart "..."` - Downloads the main app entry point with Firebase initialization
+2. `curl -o lib/map_page.dart "..."` - Downloads the Google Maps integration page
+3. `curl -o lib/control.dart "..."` - Downloads the robot control interface with Realtime Database
+4. `curl -o lib/dashboard_firestore.dart "..."` - Downloads the dashboard with Firestore data visualization
+5. `curl -o lib/config.dart "..."` - Downloads configuration file with app constants
+6. `curl -o web/index.html "..."` - Downloads web HTML file with Firebase and Maps SDK scripts
 
 **Verification**:
 - Check `pubspec.yaml` for new dependencies
@@ -121,21 +134,23 @@ curl -o web/index.html "https://raw.githubusercontent.com/pedi10/umee_rec_flutte
 
 ## Step 6: Deployment
 
-**Deploy to Firebase Hosting**:
+**Deploy to Firebase Hosting for first time**:
 
 ```bash
-# Build and deploy in one command
 flutter build web && firebase init hosting && firebase deploy
 ```
 
-**Manual Setup**:
-1. Run `firebase init hosting`
-2. Select existing project
-3. Set public directory: `build/web`
-4. Configure as single-page app: **Yes**
-5. Set up automatic builds: **No**
-6. Run `flutter build web`
-7. Run `firebase deploy`
+for initializing the firebase hosting, follow this:
+1. Select existing project
+2. Set public directory: `build/web`
+3. Configure as single-page app: **Yes**
+4. Set up automatic builds: **No**
+
+**Deploy to Firebase Hosting - updating the webapp**:
+
+```bash
+flutter build web && firebase deploy
+```
 
 **Verification**:
 - Visit your live app URL

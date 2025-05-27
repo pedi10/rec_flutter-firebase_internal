@@ -2,14 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:rec_complete_app/firebase_options.dart';
-import 'dashboard_firestore.dart';
-import 'dashboard.dart';
+import 'firebase_options.dart';
+import 'dashboard_page.dart';
 import 'map_page.dart';
-import 'control.dart';
-import 'config.dart';
+import 'remote_control_page.dart';
+import 'config_page.dart';
 
 void main() async {
+  // Ensure Flutter bindings are initialized before using Firebase
+  // This is necessary for Flutter to work properly with Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
@@ -63,17 +64,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  /*
+  This page serves as the main entry point for the app,
+  it doesn't contain any specific visual elements or functionality.
+  Instead, it initializes the app and sets up the main navigation structure.
+  The main navigation is handled by a bottom navigation bar that allows users
+  to switch between different screens: Dashboard, Control, Map, and Config.
+  The screens are defined in a list and displayed based on the current index
+  of the bottom navigation bar.
+
+  Each screen is a WIDGET that represents a different feature of the app:
+  - DashboardScreen: Displays the main dashboard with telemetry data. Interacting with Firebase Firestore.
+  - ControlScreen: Provides remote control functionality for the robot. Interacting with Firebase Realtime database.
+  - MapScreen: Shows the robot's location on a map. Interacting with Google Maps API.
+  - ConfigScreen: Allows Resetting the Firebase's Firestore Database. 
+  */
+
+  // ------- VARIABLES ------- //
+
   // Define the current index for the bottom navigation bar
   int currentIndex = 0;
 
   // List of screens to display based on the bottom navigation bar index
   final List<Widget> screens = [
     const DashboardScreen(),
-    //const Dashboard(),
     const ControlScreen(),
-    const MapPage(),
+    const MapScreen(),
     const ConfigScreen(),
   ];
+
+  // ------- BUILD ------- //
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
             // Handle tab selection - update current index and rebuild UI
             onTap: (index) {
+              // Update the current index when a tab is tapped by setting state
+              // Remember UI = f(State), so changing state rebuilds the UI
               setState(() {
                 currentIndex = index;
               });
