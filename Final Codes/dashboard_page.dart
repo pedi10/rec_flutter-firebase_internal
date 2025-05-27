@@ -275,11 +275,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     // Convert data to chart points
                     List<FlSpot> spots = [];
+                    print(temperatureArray.length);
                     for (int i = 0; i < temperatureArray.length; i++) {
                       final item = temperatureArray[i] as Map<String, dynamic>;
                       final double value = (item['value'] as num).toDouble();
                       spots.add(FlSpot(i.toDouble(), value));
                     }
+
+                    // Sort the spots by x value (time)
+                    spots.sort((a, b) => a.x.compareTo(b.x));
 
                     // Create simple line chart
                     return LineChart(
@@ -300,18 +304,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               reservedSize: 30,
+                              interval: 2, // Show every 2nd data point
                               getTitlesWidget: (double value, TitleMeta meta) {
+                                // Only show labels for even indices (0, 2, 4, 6, etc.)
+                                if (value % 2 != 0) {
+                                  return const Text('');
+                                }
+
                                 if (value < 0 ||
                                     value >= temperatureArray.length) {
                                   return const Text('');
                                 }
+
                                 final item =
                                     temperatureArray[value.toInt()]
                                         as Map<String, dynamic>;
                                 final DateTime dateTime =
                                     (item['datetime'] as Timestamp).toDate();
                                 return Text(
-                                  '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}',
+                                  '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}',
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 10,
