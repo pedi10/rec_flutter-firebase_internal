@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:math' as math;
 
 class ConfigScreen extends StatefulWidget {
   const ConfigScreen({super.key});
@@ -218,7 +219,7 @@ class ConfigScreenState extends State<ConfigScreen> {
       DateTime currentTime = DateTime.now();
 
       // Make 24 temperature readings (one for each 2 hour)
-      for (int hour = 0; hour < 24; hour++) {
+      for (int hour = 0; hour < 12; hour++) {
         // Calculate time for each 2-hour interval with .00 minutes
         DateTime timeForThisHour = DateTime(
           currentTime.year,
