@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math' as math;
 
 class ConfigScreen extends StatefulWidget {
   const ConfigScreen({super.key});
@@ -228,8 +229,7 @@ class ConfigScreenState extends State<ConfigScreen> {
         );
 
         // Create random temperature between 20-30 degrees
-        double fakeTemperature =
-            20.0 + (DateTime.now().millisecondsSinceEpoch + hour * 1000) % 10;
+        double fakeTemperature = 20.0 + (20.0 * math.Random().nextDouble());
 
         // Add this temperature reading to our list
         temperatureList.add({
